@@ -1,0 +1,136 @@
+Question 1:
+
+Enter input: 100
+100
+
+
+
+Question 2:
+
+The first call to 'strtok()' takes the original string that I want to begin parsing.
+The subsequent calls use NULL instead of the original; string so that 'strtok()' continues
+parsing the initial string from where it left off
+
+Question 3:
+
+The delimiter that I should use for regular text input is " "
+
+Question 4:
+
+Enter input: Saint Louis
+Saint
+
+Question 5:
+
+Enter input: Saint Louis
+Saint
+Louis
+
+
+Question 6:
+
+Code is as follows:	
+Enter input: Saint Louis
+Saint
+Louis
+
+Question 7:
+
+Blank
+
+Question 8:
+
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    char input[256];
+    char *token;
+
+    int max_args = 15;
+    int max_argv_size = max_args + 2;
+    char *cmd;
+    char *my_argv[max_argv_size];
+
+    printf("Enter input: ");
+
+    if (fgets(input, sizeof(input), stdin) == NULL) {
+        return 1;
+    }
+
+    input[strcspn(input, "\n")] = '\0';
+
+    token = strtok(input, " ");    cmd = token;
+
+    while (token != NULL) {
+        printf("%s\n", token);
+        token = strtok(NULL, " ");
+    }
+
+    return 0;
+}
+
+Question 9:
+
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    char input[256];
+    char *token;
+
+    int max_args = 15;
+    int max_argv_size = max_args + 2; // one for argv[0], one for null terminator
+    char *cmd;
+    char *my_argv[max_argv_size];
+
+    printf("Enter input: ");
+
+    if (fgets(input, sizeof(input), stdin) == NULL) {
+        return 1;
+    }
+
+    input[strcspn(input, "\n")] = '\0';
+
+    token = strtok(input, " ");
+
+    cmd = token;
+
+    my_argv[0] = cmd;
+
+    int i = 1;
+    while ((token = strtok(NULL, " ")) != NULL && i < max_argv_size - 1) {
+        my_argv[i] = token;
+        i++;
+    }
+
+    my_argv[i] = NULL;
+
+    while (token != NULL) {
+        printf("%s\n", token);
+        token = strtok(NULL, " ");
+    }
+
+    return 0;
+}
+
+Question 10:
+
+Enter input: ls -al
+total 44
+drwxrwxrwx 1 jafet_cald jafet_cald  4096 Mar 31 23:22 .
+drwxrwxrwx 1 jafet_cald jafet_cald  4096 Mar 27 11:11 ..
+-rwxrwxrwx 1 jafet_cald jafet_cald    65 Mar 19 08:27 README.md
+-rwxrwxrwx 1 jafet_cald jafet_cald 16184 Mar 26 23:31 fork
+-rwxrwxrwx 1 jafet_cald jafet_cald  2518 Mar 26 23:31 fork.c
+drwxrwxrwx 1 jafet_cald jafet_cald  4096 Mar 19 17:37 lab-1-run-length-compression
+drwxrwxrwx 1 jafet_cald jafet_cald  4096 Mar 19 16:51 studio-0-shell
+drwxrwxrwx 1 jafet_cald jafet_cald  4096 Mar 19 16:51 studio-1-hello-world
+drwxrwxrwx 1 jafet_cald jafet_cald  4096 Mar 19 16:51 studio-2-input-output
+drwxrwxrwx 1 jafet_cald jafet_cald  4096 Mar 19 16:51 studio-3-pointers
+drwxrwxrwx 1 jafet_cald jafet_cald  4096 Mar 19 16:51 studio-4-error-checking
+-rwxrwxrwx 1 jafet_cald jafet_cald 16296 Mar 31 23:22 studio_6_Parsing_Jafet_Calderon
+-rwxrwxrwx 1 jafet_cald jafet_cald  3440 Mar 31 23:22 studio_6_Parsing_Jafet_Calderon.c
+-rwxrwxrwx 1 jafet_cald jafet_cald  1863 Mar 31 23:21 studio_6_answers_Jafet_Calderon.txt
+
+

@@ -1,0 +1,140 @@
+Question 1:
+
+Program 1:
+
+#include <stdio.h>
+
+int main(void) {
+    char input[256];
+
+    while (1) {
+        if (fgets(input, sizeof(input), stdin) == NULL) {
+            break;
+        }
+        printf("Program 2 got: %s", input);
+    }
+
+    return 0;
+}
+
+Program 2:
+
+#include <stdio.h>
+
+int main(void) {
+    char input[256];
+
+    while (1) {
+        if (fgets(input, sizeof(input), stdin) == NULL) {
+            break;
+        }
+        printf("Program 2 got: %s", input);
+    }
+
+    return 0;
+}
+
+Question 2:
+
+Program 1 output line
+saint louis
+Program 2 got: saint louis
+saint louis
+Program 2 got: saint louis
+missouri
+Program 2 got: missouri
+^C
+
+
+Question 3:
+
+The element of fd[2] that contains the read end of the pipe after pipe() successfully returns is
+fd[0]. The element that contains write end is fd[1]
+
+Question 4:
+
+The argument that closes wheb the function succeeds is dup2(oldfp, newfp);
+
+Question5:
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+int main(void) {
+    int fd[2];
+    pid_t child1, child2;
+
+    if (pipe(fd) == -1) {
+        perror("pipe");
+        return 1;
+    }
+
+    child1 = fork();
+    if (child1 < 0) {
+        perror("fork child1");
+        return 1;
+    }
+
+    if (child1 == 0) {
+        if (dup2(fd[1], STDOUT_FILENO) == -1) {
+            perror("dup2 child1");
+            exit(1);
+        }
+
+        char *cmd = "./program1";
+        char *myargv[] = {"print", NULL};
+        execvp(cmd, myargv);
+        perror("Error exec'ing print");
+        exit(1);
+    }
+
+    child2 = fork();
+    if (child2 < 0) {
+        perror("fork child2");
+        return 1;
+    }
+
+    if (child2 == 0) {
+        if (dup2(fd[0], STDIN_FILENO) == -1) {
+            perror("dup2 child2");
+            exit(1);
+        }
+
+        char *cmd = "./program2";
+        char *myargv[] = {"input", NULL};
+        execvp(cmd, myargv);
+        perror("Error exec'ing input");
+        exit(1);
+    }
+
+    waitpid(child1, NULL, 0);
+    waitpid(child2, NULL, 0);
+
+    return 0;
+}
+
+
+Question 6:
+
+Program 2 got: Program 1 output line
+saint louis
+saint louis
+^C
+
+
+Question 7:
+
+Program 2 got: Program 1 output line
+
+Question 8:
+
+Two advantages to this stream abiguity is as follows:
+1. It aids in reusability as programs can be written once using input/output and the OS can connect them
+to files and pipes wihtout changing the program code
+
+2. It also gives flexibility and composibility as independent prgrams can be combined together in strong
+ways even if they were not initially intended to do so
+
