@@ -1,0 +1,22 @@
+Question 1:
+
+This program supports:
+
+	the built-in command cd dir
+	backwards pipeline syntax using (
+	EOF exit using Ctrl+D
+	syntax checking for invalid null commands
+	SIGINT handling with Ctrl+C
+	a Makefile that compiles the program with make
+
+Known limitations:
+
+	Each command is limited to at most 15 arguments.
+	Each input line is limited to 256 characters.
+	The shell does not support quoted strings or advanced shell syntax.
+	The exact exec error message depends on perror(), so it may say "No such file or directory" instead of exactly "Not found."
+
+Question 2:
+
+I attempted the extra credit prompt exercise.
+The shell prompt displays the current working directory relative to the HOME directory when possible.

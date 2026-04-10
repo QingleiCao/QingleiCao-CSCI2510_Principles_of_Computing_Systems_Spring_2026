@@ -1,0 +1,124 @@
+Question 1:
+
+Sleeper's PID is: 490
+Slept for 0 iterations!
+Slept for 1 iterations!
+Slept for 2 iterations!
+Slept for 3 iterations!
+Slept for 4 iterations!
+Slept for 5 iterations!
+
+
+Question 2:
+
+The numeric value that SIGINT has is = 2
+Associated comment: = interrupt fromm keyboard
+
+Question 3:
+
+When the command is run, the sleeper process terminates immediately, because the default action of SIGINT is to kill said process
+
+Question 4:
+
+The signal I picked is SIGQUIT, like SIGINT, it terminated the process
+Result:
+
+Sleeper's PID is: 5393
+Slept for 0 iterations!
+Slept for 1 iterations!
+Slept for 2 iterations!
+Slept for 3 iterations!
+Slept for 4 iterations!
+Slept for 5 iterations!
+Slept for 6 iterations!
+Slept for 7 iterations!
+Quit (core dumped)
+
+
+Question 5:
+
+Both the caller and the sleeper terminate. There was no message printed out
+
+Question 6:
+
+//A simple program that fork()s and exec()s the ./sleep program
+
+#include <unistd.h> //fork(), execvp(), perror(), waidpid()
+#include <stdlib.h> //For exit()
+#include <stdio.h> //For printf()
+#include <sys/wait.h>
+#include <signal.h>
+
+void ignore_sigint(int signum){
+        printf("\nIgnoring SIGINT in caller.\n" );
+        }
+
+int main( int argc, char* argv[] ){
+
+        pid_t ret;
+
+        signal(SIGINT, ignore_sigint);
+
+        printf("Forking sleeper...\n");
+
+        ret = fork();
+        if( ret == -1 ){
+                perror("Could not fork");
+                exit(-1);
+        }
+
+        if( ret == 0 ){ //Child
+                char* cmd = "./sleep";
+                char* myargv[] = {"sleep", NULL};
+
+                execvp(cmd, myargv);
+                perror("Error calling execvp");
+                exit(-1);
+        }
+
+        //Parent
+        printf("Waiting for sleeper %d...\n", ret);
+        waitpid( ret, NULL, 0 );
+
+        printf("Parent finished waiting and returned successfully!\n");
+
+
+        return 0;
+}
+
+
+Question 7:
+
+Forking sleeper...
+Waiting for sleeper 5599...
+Sleeper's PID is: 5599
+Slept for 0 iterations!
+Slept for 1 iterations!
+Slept for 2 iterations!
+Slept for 3 iterations!
+Slept for 4 iterations!
+Slept for 5 iterations!
+Slept for 6 iterations!
+Slept for 7 iterations!
+Slept for 8 iterations!
+Slept for 9 iterations!
+Slept for 10 iterations!
+Slept for 11 iterations!
+Slept for 12 iterations!
+^C
+Ignoring SIGINT in caller.
+Parent finished waiting and returned successfully!
+
+
+Question 8:
+
+Another useful situtation in which signals could be used is when a server needs to
+shut down cleanely as it can catch the signal, save the data, and close files properly
+without having to stop abruptly
+
+Extra Credit 1:
+
+Nothing happens but the terminal gives a fresh prompt. This prevents the shell from being
+killed everytime i press CTRL-C
+
+
