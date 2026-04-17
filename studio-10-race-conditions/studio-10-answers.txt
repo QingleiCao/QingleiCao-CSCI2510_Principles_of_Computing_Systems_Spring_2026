@@ -1,0 +1,78 @@
+Question 1:
+
+int race = 0;
+const int ITERATIONS = 2000000;
+
+void* adder(void* arg) {
+    for (int i = 0; i < ITERATIONS; i++) {
+        race++;
+    }
+    return NULL;
+}
+
+void* subtractor(void* arg) {
+    for (int i = 0; i < ITERATIONS; i++) {
+        race--;
+    }
+    return NULL;
+}
+
+
+Question 2:
+
+If I executed the functions directly in main the final result would be 0
+
+Question 3:
+
+Unlike the previous, the final will not be 0 because of the race condition and
+each run will generate different values
+
+Question 4:
+
+Initial value of race: 0
+Final value of race: -344754
+
+Initial value of race: 0
+Final value of race: -541388
+
+Initial value of race: 0
+Final value of race: 338491
+
+Initial value of race: 0
+Final value of race: 1417632
+
+
+Question 5:
+
+The pgram's behavior happens because 'race++' and 'race--' are not atomic operations. They are
+read-modify-write sequences and if both threads do them at the same time, one update can
+overwrite the other. I believe the maximum value could be 2000000 or -2000000
+
+Question 6:
+
+As the number of iterations goes down, the race still happens but there is less consistency and
+some runs give me 0.
+
+Question 7:
+
+Yes, even with one processor core the OS can switch easily between threads although a thread 
+may be interrupted between the read and write parts of 'race++' or 'race--'
+
+Question 8:
+
+When we run the command, it pins the program to only one processor core and I sometimes see
+incorrect final values especially with larger iterations.
+
+Question 9:
+
+The run is more likely to appear although the larger number of iterations allows a greater
+chnve that bad interleavings happen
+
+Question 10:
+
+Although we use one core, both threads are still sharing the same variable and the OS switches
+between them during execution. Since 'race++' and 'race--' are not atomic, one thread can be paused
+after reading race but before writing it back, then the other thread changes race, and when the first
+resumes it writes an outdated value.
+
+
